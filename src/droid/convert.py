@@ -178,7 +178,7 @@ def convert_rules(parameters, droid_config, base_config, logger_param):
             platform = ElasticPlatform(droid_config, logger_param, "eql", raw=False)
         elif 'azure' in platform_name:
             platform = SentinelPlatform(droid_config, logger_param)
-        elif parameters.platform == 'microsoft_defender':
+        elif parameters.platform == 'kusto':
             platform = MicrosoftXDRPlatform(droid_config, logger_param)
 
     if path.is_dir():

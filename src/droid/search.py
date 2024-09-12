@@ -144,7 +144,7 @@ def search_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
         platform = SplunkPlatform(export_config, logger_param)
     elif parameters.platform == 'azure':
         platform = SentinelPlatform(export_config, logger_param)
-    elif parameters.platform == 'microsoft_defender':
+    elif parameters.platform == 'kusto':
         platform = MicrosoftXDRPlatform(export_config, logger_param)
     elif parameters.platform == 'esql' or parameters.platform == 'eql':
         platform = ElasticPlatform(export_config, logger_param, parameters.platform, raw=True)
