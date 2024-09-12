@@ -259,6 +259,8 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                         category = c_value.replace("-", " ").title().replace(" ", "")
         if not category:
             category = "Execution"  # Fallback... this should never happen
+            #mitreTechniques = []  # Fallback... this should never happen
+            self.logger.warning("No category found in the tags. Falling Back to Category 'Execution'")
         try:
             alert_rule = {
                 "displayName": display_name,
@@ -333,6 +335,8 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                     "error": e,
                 },
             )
+            if self._debug:
+                self.logger.debug(str(alert_rule))
             raise
 
     def check_rule_changes(self, existing_rule, new_rule):
@@ -378,6 +382,8 @@ class MicrosoftXDRPlatform(AbstractPlatform):
             return True
         if change:
             self.logger.info(f"Rule '{new_rule['displayName']}' has changed")
+            if self._debug:
+                self.logger.debug(f"Existing Rule: {existing_rule}")
             return True
         else:
             self.logger.info(
@@ -410,6 +416,8 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                     "error": response,
                 },
             )
+            if self._debug:
+                self.logger.debug(str(alert_rule))
         elif status_code == 403:
             self.logger.error(
                 f"Could not export the rule {rule_file} due to insufficient permissions. {response}",
@@ -420,6 +428,8 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                     "error": response,
                 },
             )
+            if self._debug:
+                self.logger.debug(str(alert_rule))
         elif status_code == 201 or 200:
             if "error" in response:
                 self.logger.error(
@@ -431,6 +441,8 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                         "error": response,
                     },
                 )
+                if self._debug:
+                    self.logger.debug(str(alert_rule))
                 raise Exception(response)
             else:
                 self.logger.info(
@@ -569,10 +581,11 @@ class MicrosoftXDRPlatform(AbstractPlatform):
             if "impactedAssetType" in asset and "identifier" in asset:
                 impactedAssetType = asset["impactedAssetType"].capitalize()
                 identifier = asset["identifier"]
+                identifier = identifier[0].lower() + identifier[1:] # First letter to lower case since somehow this is the standard of MS?
                 # Define a mapping of action names to valid identifiers
                 valid_identifiers = {
                     "Device": ["deviceId", "deviceName"],
-                    "Mailbox": ["accountUpn", "initiatingProcessAccountUpn"],
+                    "Mailbox": ["accountUpn", "initiatingProcessAccountUpn", "senderFromAddress"],
                     "User": [
                         "accountObjectId",
                         "accountSid",

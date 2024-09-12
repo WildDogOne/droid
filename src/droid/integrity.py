@@ -272,7 +272,7 @@ def integrity_rule(parameters, rule_converted, rule_content, platform, rule_file
     elif parameters.platform in ["esql", "eql"]:
         error = integrity_rule_elastic(rule_converted, rule_content, platform, rule_file, parameters, logger, error)
         return error
-    elif parameters.platform == 'microsoft_defender': # TODO: Add Integrity check for Microsoft 365 Defender
+    elif parameters.platform == 'kusto': # TODO: Add Integrity check for Microsoft 365 Defender
         error = integrity_rule_ms_xdr(rule_converted, rule_content, platform, rule_file, parameters, logger, error)
         return error
     elif 'azure' in parameters.platform:

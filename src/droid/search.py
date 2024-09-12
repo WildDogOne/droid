@@ -120,7 +120,7 @@ def search_rule(parameters, rule_content, rule_converted, platform, rule_file, e
                                                     parameters, logger, error, search_warning,
                                                     rule_content, parameters.platform)
         return error, search_warning
-    elif parameters.platform == 'microsoft_defender':
+    elif parameters.platform == 'kusto':
         error, search_warning = search_rule_ms_xdr(rule_converted, platform, rule_file, parameters, logger, error, search_warning)
         return error, search_warning
     elif 'azure' in parameters.platform:
