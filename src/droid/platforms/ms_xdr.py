@@ -13,6 +13,8 @@ from droid.color import ColorLogger
 from msal import ConfidentialClientApplication
 from azure.identity import DefaultAzureCredential
 
+
+
 class MicrosoftXDRPlatform(AbstractPlatform):
 
     def __init__(self, parameters: dict, logger_param: dict) -> None:
@@ -20,6 +22,11 @@ class MicrosoftXDRPlatform(AbstractPlatform):
         super().__init__(name="Microsoft XDR")
 
         self.logger = ColorLogger(__name__, **logger_param)
+        if "debug_mode" in logger_param:
+            self._debug_mode = logger_param["debug_mode"]
+        else:
+            self._debug_mode = False
+
 
         self._parameters = parameters
 
@@ -81,22 +88,40 @@ class MicrosoftXDRPlatform(AbstractPlatform):
         # TODO: Provide a list of tenant ids and process
         return None
 
-        customer = customer_info["customer"]
-        workspace_id = customer_info["workspace_id"]
+    def format_table(self, data):
+        if not data:
+            print("No data to display")
+            return
+    
+        # Extract headers and rows
+        headers = list(data[0].keys())
+        rows = [list(item.values()) for item in data]
+    
+        # Create the header row
+        header_row = ' | '.join(headers)
+        separator_row = ' | '.join(['---'] * len(headers))
+    
+        # Create the data rows
+        data_rows = [' | '.join(map(str, row)) for row in rows]
+    
+        # Print the Markdown table
+        print(header_row)
+        print(separator_row)
+        for row in data_rows:
+            print(row)
 
-        results = client.query_resource(
-            workspace_id,
-            rule_converted,
-            timespan=(start_time, current_time),
-            server_timeout=self._timeout,
-        )
+    def format_list(self, data):
+        if not data:
+            print("No data to display")
+            return
 
-        result = 0
+        for item in data:
+            print("---")
+            for key, value in item.items():
+                print(f"{key}: {value}")
+            print()  # Blank line to separate items
 
-        for table in results.tables:
-            result += len(table.rows)
 
-        return customer, result
 
     def run_xdr_search(self, rule_converted, rule_file):
         payload = {"Query": rule_converted, "Timespan": "P1D"}
@@ -110,6 +135,15 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                 )
                 raise
             else:
+                if self._debug_mode:
+                    #self.format_table(results["results"][:10])
+                    self.format_list(results["results"][:2])
+                    #head = 0
+                    #for result in results["results"]:
+                    #    head += 1
+                    #    print(result)
+                    #    if head == 5:
+                    #        break
                 return len(results["results"])
         except Exception as e:
             self.logger.error(f"Error while running the query {e}")

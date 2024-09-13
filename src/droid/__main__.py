@@ -17,6 +17,7 @@ from droid.search import search_rule_raw
 from droid.export import export_rule_raw
 from droid.list import list_keys
 from droid.integrity import integrity_rule_raw
+from droid.functions import set_logger
 from droid.color import ColorLogger
 
 def init_argparse() -> argparse.ArgumentParser:
@@ -35,6 +36,7 @@ def init_argparse() -> argparse.ArgumentParser:
     parser.add_argument("-v", "--validate", help="Validate the rules", action="store_true")
     parser.add_argument("-r", "--rules", help="Rules path", required=True)
     parser.add_argument("-s", "--search", help="Search in the platform using the rules", action="store_true")
+    parser.add_argument("-fl", "--format-list", help="Format the Search Output as a list", action="store_true")
     parser.add_argument("-c", "--convert", help="Convert the rules", action="store_true")
     parser.add_argument("-cf", "--config-file", help="DROID configuration file path")
     parser.add_argument("-d", "--debug", help="Enable debugging", action="store_true")
@@ -260,17 +262,13 @@ def main(argv=None) -> None:
         "debug_mode": args.debug,
         "json_enabled": args.json,
         "json_stdout": args.json_stdout,
-        "log_file": args.json_output
+        "log_file": args.json_output,
+        #"format_list": args.format_list,
     }
-    logger = ColorLogger("droid", **logger_param)
+    logger = set_logger(logger_param)
+    #logger = ColorLogger("droid", **logger_param)
 
-    # Set logger level based on debug flag
-    if args.debug:
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
-
-    logging.setLoggerClass(ColorLogger)
+    #logging.setLoggerClass(ColorLogger)
 
     parameters = args
 
