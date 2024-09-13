@@ -22,10 +22,10 @@ class MicrosoftXDRPlatform(AbstractPlatform):
         super().__init__(name="Microsoft XDR")
 
         self.logger = set_logger(logger_name=__name__, params=meta_dict)
-        if "debug_mode" in meta_dict:
-            self._debug_mode = meta_dict["debug_mode"]
+        if "format_list" in meta_dict:
+            self._format_list = meta_dict["format_list"]
         else:
-            self._debug_mode = False
+            self._format_list = False
 
 
         self._parameters = parameters
@@ -135,9 +135,9 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                 )
                 raise
             else:
-                if self._debug_mode:
-                    #self.format_table(results["results"][:10])
+                if self._format_list:
                     self.format_list(results["results"][:2])
+                    #self.format_table(results["results"][:10])
                     #head = 0
                     #for result in results["results"]:
                     #    head += 1
