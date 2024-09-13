@@ -23,8 +23,8 @@ class Conversion:
     Args:
         parameters(dict)
     """
-    def __init__(self, parameters: dict, base_config, platform_name, logger_param) -> None:
-        self.logger = set_logger(logger_name=__name__, params=logger_param)
+    def __init__(self, parameters: dict, base_config, platform_name, meta_dict) -> None:
+        self.logger = set_logger(logger_name=__name__, params=meta_dict)
         self._parameters = parameters["pipelines"]
         self._filters_directory = base_config.get("sigma_filters_directory", None)
         self._platform_name = platform_name
@@ -149,18 +149,18 @@ def load_rule(rule_file):
             error = True
             return error
 
-def convert_sigma_rule(rule_file, parameters, logger, sigma_objects, target, platform, error, search_warning, rules, logger_param):
+def convert_sigma_rule(rule_file, parameters, logger, sigma_objects, target, platform, error, search_warning, rules, meta_dict):
 
     logger.debug("processing rule {0}".format(rule_file))
 
     rule_content = load_rule(rule_file)
     sigma_objects[rule_content["title"]] = rule_content
-    error, search_warning = convert_sigma(parameters, logger, rule_content, rule_file, target, platform, error, search_warning, rules, logger_param)
+    error, search_warning = convert_sigma(parameters, logger, rule_content, rule_file, target, platform, error, search_warning, rules, meta_dict)
     return error, search_warning
 
-def convert_rules(parameters, droid_config, base_config, logger_param):
+def convert_rules(parameters, droid_config, base_config, meta_dict):
 
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
 
     error = False
     search_warning = False
@@ -173,30 +173,30 @@ def convert_rules(parameters, droid_config, base_config, logger_param):
 
     if parameters.platform and parameters.convert:
         platform_name = parameters.platform
-        target = Conversion(droid_config, base_config, platform_name, logger_param)
+        target = Conversion(droid_config, base_config, platform_name, meta_dict)
         platform = None
 
     if parameters.platform and (parameters.search or parameters.export or parameters.integrity):
         platform_name = parameters.platform
-        target = Conversion(droid_config, base_config, platform_name, logger_param)
+        target = Conversion(droid_config, base_config, platform_name, meta_dict)
         if platform_name == "splunk":
-            platform = SplunkPlatform(droid_config, logger_param)
+            platform = SplunkPlatform(droid_config, meta_dict)
         elif "esql" in platform_name:
-            platform = ElasticPlatform(droid_config, logger_param, "esql", raw=False)
+            platform = ElasticPlatform(droid_config, meta_dict, "esql", raw=False)
         elif "eql" in platform_name:
-            platform = ElasticPlatform(droid_config, logger_param, "eql", raw=False)
+            platform = ElasticPlatform(droid_config, meta_dict, "eql", raw=False)
         elif "microsoft_sentinel" in platform_name:
-            platform = SentinelPlatform(droid_config, logger_param)
+            platform = SentinelPlatform(droid_config, meta_dict)
         elif "microsoft_xdr" in platform_name and parameters.sentinel_xdr:
-            platform = SentinelPlatform(droid_config, logger_param)
+            platform = SentinelPlatform(droid_config, meta_dict)
         elif "microsoft_xdr" in platform_name:
-            platform = MicrosoftXDRPlatform(droid_config, logger_param)
+            platform = MicrosoftXDRPlatform(droid_config, meta_dict)
 
     if path.is_dir():
         error_i = False
         search_warning_i = False
         for rule_file in path.rglob("*.y*ml"):
-            error, search_warning = convert_sigma_rule(rule_file, parameters, logger, sigma_objects, target, platform, error, search_warning, rules, logger_param)
+            error, search_warning = convert_sigma_rule(rule_file, parameters, logger, sigma_objects, target, platform, error, search_warning, rules, meta_dict)
             if parameters.module:
                 rules.append(error)
             if error:
@@ -211,7 +211,7 @@ def convert_rules(parameters, droid_config, base_config, logger_param):
             return error, search_warning
 
     elif path.is_file():
-        error, search_warning = convert_sigma_rule(path, parameters, logger, sigma_objects, target, platform, error, search_warning, rules, logger_param)
+        error, search_warning = convert_sigma_rule(path, parameters, logger, sigma_objects, target, platform, error, search_warning, rules, meta_dict)
         if parameters.module:
             rules.append(error)
     else:
@@ -240,7 +240,7 @@ def convert_sigma(
         parameters, logger, rule_content,
         rule_file, target, platform,
         error, search_warning, rules,
-        logger_param):
+        meta_dict):
 
     try:
         rule_converted = target.convert_rule(rule_content, rule_file, platform)
@@ -267,26 +267,26 @@ def convert_sigma(
 
     if parameters.export and parameters.search and rule_converted:
         try:
-            error, search_warning = search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, logger_param)
+            error, search_warning = search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, meta_dict)
         except:
             logger.error(f"Could not export the rule {rule_file} since the search ran into error.", extra={"rule_file": rule_file, "error": e, "rule_content": rule_content})
 
         if not error:
             error = False
-            error = export_rule(parameters, rule_content, rule_converted, platform, rule_file, error, logger_param)
+            error = export_rule(parameters, rule_content, rule_converted, platform, rule_file, error, meta_dict)
 
         return error, search_warning
 
     elif parameters.search and rule_converted:
-        error, search_warning = search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, logger_param)
+        error, search_warning = search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, meta_dict)
         return error, search_warning
 
     elif parameters.export and rule_converted:
-        error = export_rule(parameters, rule_content, rule_converted, platform, rule_file, error, logger_param)
+        error = export_rule(parameters, rule_content, rule_converted, platform, rule_file, error, meta_dict)
         return error, search_warning
 
     elif parameters.integrity and rule_converted:
-        error = integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, logger_param)
+        error = integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, meta_dict)
         return error, search_warning
 
     elif parameters.module:

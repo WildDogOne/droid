@@ -108,12 +108,12 @@ def download_sigma_core(logger):
     return asset_name
 
 
-def update_sigmahq_core(parameters, logger_param):
+def update_sigmahq_core(parameters, meta_dict):
     """Update rules
     """
     # Sigma Core
 
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
 
     rules_zip = download_sigma_core(logger)
     with ZipFile(f"tmp/{rules_zip}", 'r') as zip_ref:

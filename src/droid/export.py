@@ -41,9 +41,9 @@ def load_rule(rule_file):
 def export_rule(
         parameters: dict, rule_content: object, rule_converted: str,
         platform: object, rule_file: str, error: bool,
-        logger_param: dict):
+        meta_dict: dict):
 
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
 
     rule_content = post_rule_content(rule_content)
 
@@ -60,22 +60,22 @@ def export_rule(
     logger.info(f"Successfully exported the rule {rule_file}")
     return error
 
-def export_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
+def export_rule_raw(parameters: dict, export_config: dict, meta_dict: dict):
 
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
 
     path = Path(parameters.rules)
 
     error = False
 
     if parameters.platform == "splunk":
-        platform = SplunkPlatform(export_config, logger_param)
+        platform = SplunkPlatform(export_config, meta_dict)
     elif parameters.platform == "microsoft_sentinel":
-        platform = SentinelPlatform(export_config, logger_param)
+        platform = SentinelPlatform(export_config, meta_dict)
     elif parameters.platform == "microsoft_xdr":
-        platform = MicrosoftXDRPlatform(export_config, logger_param)
+        platform = MicrosoftXDRPlatform(export_config, meta_dict)
     elif parameters.platform == "esql" or parameters.platform == "eql":
-        platform = ElasticPlatform(export_config, logger_param, parameters.platform, raw=True)
+        platform = ElasticPlatform(export_config, meta_dict, parameters.platform, raw=True)
 
     if path.is_dir():
         error_i = False

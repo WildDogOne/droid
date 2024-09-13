@@ -258,9 +258,9 @@ def integrity_rule_elastic(rule_converted, rule_content, platform: ElasticPlatfo
     if error:
         return error
 
-def integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, logger_param):
+def integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, meta_dict):
 
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
 
     error = False
 
@@ -279,27 +279,27 @@ def integrity_rule(parameters, rule_converted, rule_content, platform, rule_file
         error = integrity_rule_sentinel(rule_converted, rule_content, platform, rule_file, parameters, logger, error)
         return error
 
-def integrity_rule_raw(parameters: dict, export_config: dict, logger_param: dict, raw_rule=False):
+def integrity_rule_raw(parameters: dict, export_config: dict, meta_dict: dict, raw_rule=False):
 
     error = False
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
     path = Path(parameters.rules)
 
     if parameters.platform == "splunk":
-        platform = SplunkPlatform(export_config, logger_param)
+        platform = SplunkPlatform(export_config, meta_dict)
     elif parameters.platform == "microsoft_sentinel":
-        platform = SentinelPlatform(export_config, logger_param)
+        platform = SentinelPlatform(export_config, meta_dict)
     elif parameters.platform == "microsoft_xdr":
-        platform = MicrosoftXDRPlatform(export_config, logger_param)
+        platform = MicrosoftXDRPlatform(export_config, meta_dict)
     elif parameters.platform == "esql" or parameters.platform == "eql":
-        platform = ElasticPlatform(export_config, logger_param, parameters.platform, raw=True)
+        platform = ElasticPlatform(export_config, meta_dict, parameters.platform, raw=True)
 
     if path.is_dir():
         error_i = False
         for rule_file in path.rglob("*.y*ml"):
             rule_content = load_rule(rule_file)
             rule_converted = rule_content["detection"]
-            error = integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, logger_param)
+            error = integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, meta_dict)
             if error:
                 error_i = True
         if error_i:
@@ -310,7 +310,7 @@ def integrity_rule_raw(parameters: dict, export_config: dict, logger_param: dict
         rule_file = path
         rule_content = load_rule(rule_file)
         rule_converted = rule_content["detection"]
-        error = integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, logger_param)
+        error = integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, meta_dict)
     else:
         print(f"The path {path} is neither a directory nor a file.")
 

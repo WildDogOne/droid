@@ -17,13 +17,13 @@ from azure.identity import DefaultAzureCredential
 
 class MicrosoftXDRPlatform(AbstractPlatform):
 
-    def __init__(self, parameters: dict, logger_param: dict) -> None:
+    def __init__(self, parameters: dict, meta_dict: dict) -> None:
 
         super().__init__(name="Microsoft XDR")
 
-        self.logger = set_logger(logger_name=__name__, params=logger_param)
-        if "debug_mode" in logger_param:
-            self._debug_mode = logger_param["debug_mode"]
+        self.logger = set_logger(logger_name=__name__, params=meta_dict)
+        if "debug_mode" in meta_dict:
+            self._debug_mode = meta_dict["debug_mode"]
         else:
             self._debug_mode = False
 

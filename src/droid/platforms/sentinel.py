@@ -23,13 +23,13 @@ from droid.functions import set_logger
 
 class SentinelPlatform(AbstractPlatform):
 
-    def __init__(self, parameters: dict, logger_param: dict) -> None:
+    def __init__(self, parameters: dict, meta_dict: dict) -> None:
 
         super().__init__(name="Sentinel")
 
         self._parameters = parameters
 
-        self.logger = set_logger(logger_name=__name__, params=logger_param)
+        self.logger = set_logger(logger_name=__name__, params=meta_dict)
 
         required_parameters = [
             "threshold_operator",

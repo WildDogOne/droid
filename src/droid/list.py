@@ -57,7 +57,7 @@ def list_unique_keys(rule, unique_keys) -> None:
 
     return unique_keys_list
 
-def list_keys(parameters, logger_param) -> None:
+def list_keys(parameters, meta_dict) -> None:
     """List keys features
     Gather multiple listing mode such as:
         unique_fields: list all the unique fields in the Sigma detection section
@@ -67,7 +67,7 @@ def list_keys(parameters, logger_param) -> None:
         Prints out the results.
     """
 
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
 
     if 'unique_fields' in parameters.list:
         path = Path(parameters.rules)

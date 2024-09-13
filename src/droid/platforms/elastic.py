@@ -20,14 +20,14 @@ from elasticsearch import Elasticsearch
 class ElasticPlatform(AbstractPlatform):
 
     def __init__(
-        self, parameters: dict, logger_param: bool,
+        self, parameters: dict, meta_dict: bool,
         language: str, raw: bool=False) -> None:
 
         super().__init__(name="Elastic")
 
         self._parameters = parameters
 
-        self.logger = set_logger(logger_name=__name__, params=logger_param)
+        self.logger = set_logger(logger_name=__name__, params=meta_dict)
 
         if "kibana_url" not in self._parameters:
             raise ValueError("ElasticPlatform: 'kibana_url' is not set.")

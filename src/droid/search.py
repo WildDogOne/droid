@@ -101,9 +101,9 @@ def search_rule_elastic(rule_converted, platform: ElasticPlatform, rule_file, pa
         error = True
         return error, search_warning
 
-def search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, logger_param):
+def search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, meta_dict):
 
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
 
     error = False
     search_warning = False
@@ -131,9 +131,9 @@ def search_rule(parameters, rule_content, rule_converted, platform, rule_file, e
         error, search_warning = search_rule_ms_xdr(rule_converted, platform, rule_file, parameters, logger, error, search_warning)
         return error, search_warning
 
-def search_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
+def search_rule_raw(parameters: dict, export_config: dict, meta_dict: dict):
 
-    logger = set_logger(logger_name=__name__, params=logger_param)
+    logger = set_logger(logger_name=__name__, params=meta_dict)
 
     error = False
     search_warning = False
@@ -141,15 +141,15 @@ def search_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
     path = Path(parameters.rules)
 
     if parameters.platform == "splunk":
-        platform = SplunkPlatform(export_config, logger_param)
+        platform = SplunkPlatform(export_config, meta_dict)
     elif parameters.platform == "microsoft_sentinel":
-        platform = SentinelPlatform(export_config, logger_param)
+        platform = SentinelPlatform(export_config, meta_dict)
     elif parameters.platform == "microsoft_sentinel" and parameters.sentinel_xdr:
-        platform = SentinelPlatform(export_config, logger_param)
+        platform = SentinelPlatform(export_config, meta_dict)
     elif parameters.platform == "microsoft_xdr":
-        platform = MicrosoftXDRPlatform(export_config, logger_param)
+        platform = MicrosoftXDRPlatform(export_config, meta_dict)
     elif parameters.platform == "esql" or parameters.platform == "eql":
-        platform = ElasticPlatform(export_config, logger_param, parameters.platform, raw=True)
+        platform = ElasticPlatform(export_config, meta_dict, parameters.platform, raw=True)
 
     if path.is_dir():
         error_i = False
@@ -157,7 +157,7 @@ def search_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
         for rule_file in path.rglob("*.y*ml"):
             rule_content = load_rule(rule_file)
             rule_converted = rule_content["detection"]
-            error, search_warning = search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, logger_param)
+            error, search_warning = search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, meta_dict)
             if error:
                 error_i = True
             if search_warning:
@@ -172,7 +172,7 @@ def search_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
         rule_file = path
         rule_content = load_rule(rule_file)
         rule_converted = rule_content["detection"]
-        error, search_warning = search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, logger_param)
+        error, search_warning = search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, meta_dict)
     else:
         print(f"The path {path} is neither a directory nor a file.")
 

@@ -11,11 +11,11 @@ from splunklib.binding import AuthenticationError
 
 class SplunkPlatform(AbstractPlatform):
 
-    def __init__(self, parameters: dict, logger_param: dict) -> None:
+    def __init__(self, parameters: dict, meta_dict: dict) -> None:
 
         super().__init__(name="Splunk")
 
-        self.logger = set_logger(logger_name=__name__, params=logger_param)
+        self.logger = set_logger(logger_name=__name__, params=meta_dict)
         self._parameters = parameters
 
         if 'url' not in self._parameters:
