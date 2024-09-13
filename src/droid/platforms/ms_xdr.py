@@ -9,7 +9,7 @@ import yaml
 
 from pprint import pprint
 from droid.abstracts import AbstractPlatform
-from droid.color import ColorLogger
+from droid.functions import set_logger
 from msal import ConfidentialClientApplication
 from azure.identity import DefaultAzureCredential
 
@@ -21,7 +21,7 @@ class MicrosoftXDRPlatform(AbstractPlatform):
 
         super().__init__(name="Microsoft XDR")
 
-        self.logger = ColorLogger(__name__, **logger_param)
+        self.logger = set_logger(logger_param)
         if "debug_mode" in logger_param:
             self._debug_mode = logger_param["debug_mode"]
         else:

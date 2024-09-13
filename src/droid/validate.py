@@ -9,7 +9,7 @@ from sigma.validation import SigmaValidator
 from sigma.plugins import InstalledSigmaPlugins
 from sigma.exceptions import SigmaDetectionError
 from sigma.exceptions import SigmaConditionError
-from droid.color import ColorLogger
+from droid.functions import set_logger
 
 class SigmaValidation:
 
@@ -17,7 +17,7 @@ class SigmaValidation:
         self._parameters = base_config
         self._validation_config_path = self._parameters["sigma_validation_config"]
 
-        self.logger = ColorLogger(__name__, **logger_param)
+        self.logger = set_logger(logger_param)
 
         self.logger.debug("Initializing droid.validate.SigmaValidation")
 
@@ -65,7 +65,7 @@ def load_rule(parameters, logger, rule_file):
 
 def validate_rules(parameters, return_objects, base_config, logger_param) -> None:
 
-    logger = ColorLogger(__name__, **logger_param)
+    logger = set_logger(logger_param)
 
     error = False
 

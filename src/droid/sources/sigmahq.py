@@ -10,7 +10,7 @@ import requests
 
 from zipfile import ZipFile
 from ruamel.yaml import YAML
-from droid.color import ColorLogger
+from droid.functions import set_logger
 from pathlib import Path
 
 yaml = YAML()
@@ -113,7 +113,7 @@ def update_sigmahq_core(parameters, logger_param):
     """
     # Sigma Core
 
-    logger = ColorLogger(__name__, **logger_param)
+    logger = set_logger(logger_param)
 
     rules_zip = download_sigma_core(logger)
     with ZipFile(f"tmp/{rules_zip}", 'r') as zip_ref:

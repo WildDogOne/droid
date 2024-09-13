@@ -8,7 +8,7 @@ from droid.platforms.splunk import SplunkPlatform
 from droid.platforms.sentinel import SentinelPlatform
 from droid.platforms.elastic import ElasticPlatform
 from droid.platforms.ms_xdr import MicrosoftXDRPlatform
-from droid.color import ColorLogger
+from droid.functions import set_logger
 
 def load_rule(rule_file):
 
@@ -103,7 +103,7 @@ def search_rule_elastic(rule_converted, platform: ElasticPlatform, rule_file, pa
 
 def search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, logger_param):
 
-    logger = ColorLogger(__name__, **logger_param)
+    logger = set_logger(logger_param)
 
     error = False
     search_warning = False
@@ -133,7 +133,7 @@ def search_rule(parameters, rule_content, rule_converted, platform, rule_file, e
 
 def search_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
 
-    logger = ColorLogger(__name__, **logger_param)
+    logger = set_logger(logger_param)
 
     error = False
     search_warning = False

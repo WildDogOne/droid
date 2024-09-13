@@ -9,7 +9,7 @@ from droid.platforms.splunk import SplunkPlatform
 from droid.platforms.sentinel import SentinelPlatform
 from droid.platforms.elastic import ElasticPlatform
 from droid.platforms.ms_xdr import MicrosoftXDRPlatform
-from droid.color import ColorLogger
+from droid.functions import set_logger
 
 def post_rule_content(rule_content):
     """Post-processing of rule content
@@ -43,7 +43,7 @@ def export_rule(
         platform: object, rule_file: str, error: bool,
         logger_param: dict):
 
-    logger = ColorLogger(__name__, **logger_param)
+    logger = set_logger(logger_param)
 
     rule_content = post_rule_content(rule_content)
 
@@ -62,7 +62,7 @@ def export_rule(
 
 def export_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
 
-    logger = ColorLogger(__name__, **logger_param)
+    logger = set_logger(logger_param)
 
     path = Path(parameters.rules)
 

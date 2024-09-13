@@ -5,7 +5,7 @@ import splunklib.client as client
 
 from os import environ
 from time import sleep
-from droid.color import ColorLogger
+from droid.functions import set_logger
 from droid.abstracts import AbstractPlatform
 from splunklib.binding import AuthenticationError
 
@@ -15,7 +15,7 @@ class SplunkPlatform(AbstractPlatform):
 
         super().__init__(name="Splunk")
 
-        self.logger = ColorLogger(__name__, **logger_param)
+        self.logger = set_logger(logger_param)
         self._parameters = parameters
 
         if 'url' not in self._parameters:

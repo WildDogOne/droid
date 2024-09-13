@@ -6,7 +6,7 @@ import re
 import time
 import requests
 
-from droid.color import ColorLogger
+from droid.functions import set_logger
 from droid.abstracts import AbstractPlatform
 from requests.auth import HTTPBasicAuth
 from sigma.data.mitre_attack import (
@@ -27,7 +27,7 @@ class ElasticPlatform(AbstractPlatform):
 
         self._parameters = parameters
 
-        self.logger = ColorLogger(__name__, **logger_param)
+        self.logger = set_logger(logger_param)
 
         if "kibana_url" not in self._parameters:
             raise ValueError("ElasticPlatform: 'kibana_url' is not set.")

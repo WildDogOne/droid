@@ -18,7 +18,6 @@ from droid.export import export_rule_raw
 from droid.list import list_keys
 from droid.integrity import integrity_rule_raw
 from droid.functions import set_logger
-from droid.color import ColorLogger
 
 def init_argparse() -> argparse.ArgumentParser:
     """Initialise the argument parsers
@@ -263,12 +262,9 @@ def main(argv=None) -> None:
         "json_enabled": args.json,
         "json_stdout": args.json_stdout,
         "log_file": args.json_output,
-        #"format_list": args.format_list,
+        "format_list": args.format_list,
     }
     logger = set_logger(logger_param)
-    #logger = ColorLogger("droid", **logger_param)
-
-    #logging.setLoggerClass(ColorLogger)
 
     parameters = args
 

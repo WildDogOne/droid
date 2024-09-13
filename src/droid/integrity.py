@@ -8,7 +8,7 @@ from droid.platforms.splunk import SplunkPlatform
 from droid.platforms.sentinel import SentinelPlatform
 from droid.platforms.elastic import ElasticPlatform
 from droid.platforms.ms_xdr import MicrosoftXDRPlatform
-from droid.color import ColorLogger
+from droid.functions import set_logger
 from droid.export import post_rule_content
 
 def load_rule(rule_file):
@@ -260,7 +260,7 @@ def integrity_rule_elastic(rule_converted, rule_content, platform: ElasticPlatfo
 
 def integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, logger_param):
 
-    logger = ColorLogger(__name__, **logger_param)
+    logger = set_logger(logger_param)
 
     error = False
 
@@ -282,7 +282,7 @@ def integrity_rule(parameters, rule_converted, rule_content, platform, rule_file
 def integrity_rule_raw(parameters: dict, export_config: dict, logger_param: dict, raw_rule=False):
 
     error = False
-    logger = ColorLogger(__name__, **logger_param)
+    logger = set_logger(logger_param)
     path = Path(parameters.rules)
 
     if parameters.platform == "splunk":

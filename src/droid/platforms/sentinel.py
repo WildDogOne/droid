@@ -19,7 +19,7 @@ from azure.monitor.query import LogsQueryClient, LogsQueryStatus
 from datetime import datetime, timedelta, timezone
 from azure.core.exceptions import HttpResponseError, ResourceNotFoundError
 from droid.abstracts import AbstractPlatform
-from droid.color import ColorLogger
+from droid.functions import set_logger
 
 class SentinelPlatform(AbstractPlatform):
 
@@ -29,7 +29,7 @@ class SentinelPlatform(AbstractPlatform):
 
         self._parameters = parameters
 
-        self.logger = ColorLogger(__name__, **logger_param)
+        self.logger = set_logger(logger_param)
 
         required_parameters = [
             "threshold_operator",
