@@ -15,7 +15,7 @@ class SplunkPlatform(AbstractPlatform):
 
         super().__init__(name="Splunk")
 
-        self.logger = set_logger(logger_param)
+        self.logger = set_logger(logger_name=__name__, params=logger_param)
         self._parameters = parameters
 
         if 'url' not in self._parameters:

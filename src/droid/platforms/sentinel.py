@@ -29,7 +29,7 @@ class SentinelPlatform(AbstractPlatform):
 
         self._parameters = parameters
 
-        self.logger = set_logger(logger_param)
+        self.logger = set_logger(logger_name=__name__, params=logger_param)
 
         required_parameters = [
             "threshold_operator",

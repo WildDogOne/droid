@@ -17,7 +17,7 @@ class SigmaValidation:
         self._parameters = base_config
         self._validation_config_path = self._parameters["sigma_validation_config"]
 
-        self.logger = set_logger(logger_param)
+        self.logger = set_logger(logger_name=__name__, params=logger_param)
 
         self.logger.debug("Initializing droid.validate.SigmaValidation")
 
@@ -65,7 +65,7 @@ def load_rule(parameters, logger, rule_file):
 
 def validate_rules(parameters, return_objects, base_config, logger_param) -> None:
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     error = False
 

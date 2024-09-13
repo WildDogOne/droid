@@ -21,7 +21,7 @@ class MicrosoftXDRPlatform(AbstractPlatform):
 
         super().__init__(name="Microsoft XDR")
 
-        self.logger = set_logger(logger_param)
+        self.logger = set_logger(logger_name=__name__, params=logger_param)
         if "debug_mode" in logger_param:
             self._debug_mode = logger_param["debug_mode"]
         else:

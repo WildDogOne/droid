@@ -67,7 +67,7 @@ def list_keys(parameters, logger_param) -> None:
         Prints out the results.
     """
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     if 'unique_fields' in parameters.list:
         path = Path(parameters.rules)

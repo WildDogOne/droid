@@ -113,7 +113,7 @@ def update_sigmahq_core(parameters, logger_param):
     """
     # Sigma Core
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     rules_zip = download_sigma_core(logger)
     with ZipFile(f"tmp/{rules_zip}", 'r') as zip_ref:

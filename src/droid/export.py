@@ -43,7 +43,7 @@ def export_rule(
         platform: object, rule_file: str, error: bool,
         logger_param: dict):
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     rule_content = post_rule_content(rule_content)
 
@@ -62,7 +62,7 @@ def export_rule(
 
 def export_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     path = Path(parameters.rules)
 

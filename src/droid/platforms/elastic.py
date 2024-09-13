@@ -27,7 +27,7 @@ class ElasticPlatform(AbstractPlatform):
 
         self._parameters = parameters
 
-        self.logger = set_logger(logger_param)
+        self.logger = set_logger(logger_name=__name__, params=logger_param)
 
         if "kibana_url" not in self._parameters:
             raise ValueError("ElasticPlatform: 'kibana_url' is not set.")

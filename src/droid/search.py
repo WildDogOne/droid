@@ -103,7 +103,7 @@ def search_rule_elastic(rule_converted, platform: ElasticPlatform, rule_file, pa
 
 def search_rule(parameters, rule_content, rule_converted, platform, rule_file, error, search_warning, logger_param):
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     error = False
     search_warning = False
@@ -133,7 +133,7 @@ def search_rule(parameters, rule_content, rule_converted, platform, rule_file, e
 
 def search_rule_raw(parameters: dict, export_config: dict, logger_param: dict):
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     error = False
     search_warning = False

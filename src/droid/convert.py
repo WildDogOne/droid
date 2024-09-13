@@ -24,7 +24,7 @@ class Conversion:
         parameters(dict)
     """
     def __init__(self, parameters: dict, base_config, platform_name, logger_param) -> None:
-        self.logger = set_logger(logger_param)
+        self.logger = set_logger(logger_name=__name__, params=logger_param)
         self._parameters = parameters["pipelines"]
         self._filters_directory = base_config.get("sigma_filters_directory", None)
         self._platform_name = platform_name
@@ -160,7 +160,7 @@ def convert_sigma_rule(rule_file, parameters, logger, sigma_objects, target, pla
 
 def convert_rules(parameters, droid_config, base_config, logger_param):
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     error = False
     search_warning = False

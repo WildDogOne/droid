@@ -260,7 +260,7 @@ def integrity_rule_elastic(rule_converted, rule_content, platform: ElasticPlatfo
 
 def integrity_rule(parameters, rule_converted, rule_content, platform, rule_file, error, logger_param):
 
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
 
     error = False
 
@@ -282,7 +282,7 @@ def integrity_rule(parameters, rule_converted, rule_content, platform, rule_file
 def integrity_rule_raw(parameters: dict, export_config: dict, logger_param: dict, raw_rule=False):
 
     error = False
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name=__name__, params=logger_param)
     path = Path(parameters.rules)
 
     if parameters.platform == "splunk":

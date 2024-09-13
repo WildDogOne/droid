@@ -264,7 +264,7 @@ def main(argv=None) -> None:
         "log_file": args.json_output,
         "format_list": args.format_list,
     }
-    logger = set_logger(logger_param)
+    logger = set_logger(logger_name="droid", params=logger_param)
 
     parameters = args
 

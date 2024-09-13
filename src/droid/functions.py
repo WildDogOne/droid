@@ -1,9 +1,9 @@
 from droid.color import ColorLogger
 
 
-def set_logger(params):
+def set_logger(logger_name: str = "Droid", params: dict = {}):
     logger = ColorLogger(
-        "droid",
+        logger_name,
         debug_mode=params["debug_mode"],
         json_enabled=params["json_enabled"],
         json_stdout=params["json_stdout"],
