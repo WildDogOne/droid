@@ -9,10 +9,9 @@ import yaml
 
 from pprint import pprint
 from droid.abstracts import AbstractPlatform
-from droid.functions import set_logger
+from droid.functions import set_logger, format_table, format_list
 from msal import ConfidentialClientApplication
 from azure.identity import DefaultAzureCredential
-
 
 
 class MicrosoftXDRPlatform(AbstractPlatform):
@@ -26,7 +25,10 @@ class MicrosoftXDRPlatform(AbstractPlatform):
             self._format_list = meta_dict["format_list"]
         else:
             self._format_list = False
-
+        if "search_output" in meta_dict:
+            self._search_output = meta_dict["search_output"]
+        else:
+            self._search_output = False
 
         self._parameters = parameters
 
@@ -88,41 +90,6 @@ class MicrosoftXDRPlatform(AbstractPlatform):
         # TODO: Provide a list of tenant ids and process
         return None
 
-    def format_table(self, data):
-        if not data:
-            print("No data to display")
-            return
-    
-        # Extract headers and rows
-        headers = list(data[0].keys())
-        rows = [list(item.values()) for item in data]
-    
-        # Create the header row
-        header_row = ' | '.join(headers)
-        separator_row = ' | '.join(['---'] * len(headers))
-    
-        # Create the data rows
-        data_rows = [' | '.join(map(str, row)) for row in rows]
-    
-        # Print the Markdown table
-        print(header_row)
-        print(separator_row)
-        for row in data_rows:
-            print(row)
-
-    def format_list(self, data):
-        if not data:
-            print("No data to display")
-            return
-
-        for item in data:
-            print("---")
-            for key, value in item.items():
-                print(f"{key}: {value}")
-            print()  # Blank line to separate items
-
-
-
     def run_xdr_search(self, rule_converted, rule_file):
         payload = {"Query": rule_converted, "Timespan": "P1D"}
         try:
@@ -136,10 +103,10 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                 raise
             else:
                 if self._format_list:
-                    self.format_list(results["results"][:2])
-                    #self.format_table(results["results"][:10])
-                    #head = 0
-                    #for result in results["results"]:
+                    format_list(data=results["results"][:2], outfile=self._search_output)
+                    # self.format_table(results["results"][:10])
+                    # head = 0
+                    # for result in results["results"]:
                     #    head += 1
                     #    print(result)
                     #    if head == 5:
