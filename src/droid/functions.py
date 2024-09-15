@@ -46,7 +46,7 @@ def format_list(data=[], outfile=None):
                 print(f"{key}: {value}")
             print()  # Blank line to separate items
     else:
-        with open(outfile, "w") as f:
+        with open(outfile, "w", encoding="utf8") as f:
             for item in data:
                 f.write("---\n")
                 for key, value in item.items():

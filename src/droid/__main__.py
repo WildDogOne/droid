@@ -34,9 +34,6 @@ def init_argparse() -> argparse.ArgumentParser:
                         )
     parser.add_argument("-v", "--validate", help="Validate the rules", action="store_true")
     parser.add_argument("-r", "--rules", help="Rules path", required=True)
-    parser.add_argument("-s", "--search", help="Search in the platform using the rules", action="store_true")
-    parser.add_argument("-so", "--search-output", help="Write search results to a file")
-    parser.add_argument("-fl", "--format-list", help="Format the Search Output as a list", action="store_true")
     parser.add_argument("-c", "--convert", help="Convert the rules", action="store_true")
     parser.add_argument("-cf", "--config-file", help="DROID configuration file path")
     parser.add_argument("-d", "--debug", help="Enable debugging", action="store_true")
@@ -47,6 +44,12 @@ def init_argparse() -> argparse.ArgumentParser:
     parser.add_argument("-l", "--list", help="List items from rules", choices=["unique_fields", "pipelines"])
     parser.add_argument("-m", "--mssp", help="Enable MSSP mode", action="store_true")
     parser.add_argument("-mo", "--module", help="Module mode to return converted rules as a list", action="store_true")
+    # Search Arguments
+    parser.add_argument("-s", "--search", help="Search in the platform using the rules", action="store_true")
+    parser.add_argument("-so", "--search-output", help="Write search results to a file")
+    parser.add_argument("-sn", "--search-n", help="Output N results. Defaults to 10. Select 0 to output all", type=int)
+    parser.add_argument("-fl", "--format-list", help="Format the Search Output as a list", action="store_true")
+    # Logging Arguments
     parser.add_argument("-j", "--json", help="Drop a JSON log file", action="store_true")
     parser.add_argument("-jo", "--json-output", help="Optional path for JSON log file")
     parser.add_argument("-js", "--json-stdout", help="Enable logging to stdout in JSON", action="store_true")
@@ -265,6 +268,7 @@ def main(argv=None) -> None:
         "log_file": args.json_output,
         "format_list": args.format_list,
         "search_output": args.search_output,
+        "search_n": args.search_n,
     }
     logger = set_logger(logger_name="droid", params=meta_dict)
 

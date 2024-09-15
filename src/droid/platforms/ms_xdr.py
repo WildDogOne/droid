@@ -29,6 +29,10 @@ class MicrosoftXDRPlatform(AbstractPlatform):
             self._search_output = meta_dict["search_output"]
         else:
             self._search_output = False
+        if "search_n" in meta_dict:
+            self._search_n = meta_dict["search_n"]
+        else:
+            self._search_n = 10
 
         self._parameters = parameters
 
@@ -103,7 +107,10 @@ class MicrosoftXDRPlatform(AbstractPlatform):
                 raise
             else:
                 if self._format_list:
-                    format_list(data=results["results"][:2], outfile=self._search_output)
+                    if self._search_n > 0:
+                        format_list(data=results["results"][:self._search_n], outfile=self._search_output)
+                    else:
+                        format_list(data=results["results"], outfile=self._search_output)
                     # self.format_table(results["results"][:10])
                     # head = 0
                     # for result in results["results"]:
