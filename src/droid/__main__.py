@@ -35,7 +35,7 @@ def init_argparse() -> argparse.ArgumentParser:
     parser.add_argument("-v", "--validate", help="Validate the rules", action="store_true")
     parser.add_argument("-r", "--rules", help="Rules path", required=True)
     parser.add_argument("-s", "--search", help="Search in the platform using the rules", action="store_true")
-    parser.add_argument("-so", "--search-output", "Write search results to a file")
+    parser.add_argument("-so", "--search-output", help="Write search results to a file")
     parser.add_argument("-fl", "--format-list", help="Format the Search Output as a list", action="store_true")
     parser.add_argument("-c", "--convert", help="Convert the rules", action="store_true")
     parser.add_argument("-cf", "--config-file", help="DROID configuration file path")
